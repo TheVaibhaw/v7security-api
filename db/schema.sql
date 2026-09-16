@@ -60,3 +60,17 @@ CREATE TABLE IF NOT EXISTS login_activity (
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
   INDEX (email), INDEX (created_at), INDEX (status)
 );
+
+-- URLs (path, optionally with specific query params) exempt from a
+-- Guardian site's rate-limiting and IP-blocking. 'site' is a Guardian site
+-- slug or '*' for every site. This table is the system of record; Guardian
+-- itself enforces from its own local file copy (see guardian/lib/url_allowlist.php)
+-- so the WAF never depends on this API being reachable.
+CREATE TABLE IF NOT EXISTS url_allowlist (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  site VARCHAR(64) NOT NULL DEFAULT '*',
+  pattern VARCHAR(500) NOT NULL,
+  created_by VARCHAR(190) NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY site_pattern (site, pattern)
+);
