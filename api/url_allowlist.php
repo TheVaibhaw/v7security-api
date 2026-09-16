@@ -26,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $site = trim((string) ($body['site'] ?? '*')) ?: '*';
     $pattern = trim((string) ($body['pattern'] ?? ''));
     if ($pattern === '') v7_error('pattern required');
-    $pattern = ltrim($pattern, '/');
 
     $stmt = $db->prepare('INSERT INTO url_allowlist (site, pattern, created_by) VALUES (?, ?, ?)
         ON DUPLICATE KEY UPDATE created_by = VALUES(created_by), created_at = NOW()');

@@ -1,6 +1,4 @@
 <?php
-// GET -> list every user (admin only). No password hashes or secrets in the
-// response — email, role, 2FA status, and account age only.
 $C = require __DIR__ . '/../lib/bootstrap.php';
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') v7_error('GET only', 405);
 
